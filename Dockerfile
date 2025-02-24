@@ -26,6 +26,9 @@ RUN mv sample.env .env
 # Return to /app as working directory
 WORKDIR /app
 
+COPY run.sh /app/run.sh
+RUN chmod +x /app/run.sh
+
 # Disable `set -o errexit` to prevent silent script exits
 RUN sed -i 's/set -o errexit/#set -o errexit/' run-platform.sh
 
@@ -36,4 +39,4 @@ RUN chmod +x run-platform.sh
 EXPOSE 80 443 3000 8000 5432
 
 # Start Unstract platform
-CMD ["bash", "run-platform.sh"]
+CMD ["bash", "/app/run.sh"]
