@@ -21,19 +21,14 @@ RUN git clone https://github.com/Zipstack/unstract.git .
 
 # Move into the docker directory and set up the environment
 WORKDIR /app/docker
-RUN mv sample.env .env
+RUN [ -f sample.env ] && mv sample.env .env || echo "⚠️ Warning: sample.env not found, skipping move."
 
 # Return to /app as working directory
 WORKDIR /app
 
+# Copy and ensure `run.sh` is executable
 COPY run.sh /app/run.sh
 RUN chmod +x /app/run.sh
-
-# Disable `set -o errexit` to prevent silent script exits
-RUN sed -i 's/set -o errexit/#set -o errexit/' run-platform.sh
-
-# Make the platform script executable
-RUN chmod +x run-platform.sh
 
 # Expose necessary ports
 EXPOSE 80 443 3000 8000 5432
